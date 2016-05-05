@@ -74,7 +74,7 @@ void func(struct thread_pass *p)
         /* wait until work */
         while (1) {
                 if (p->work) {
-                        /* do something */
+                        /* do something with p->data, its ours new */
 
                         /* Probably want to call this
                          * so the client knows we are done.

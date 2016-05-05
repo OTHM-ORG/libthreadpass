@@ -15,11 +15,9 @@ struct thread_pass {
 };
 
 struct thread_pass *thread_pass_new(void *data);
-
 void thread_pass_free(struct thread_pass *p);
-
+void thread_pass_continue(struct thread_pass *p);
 void *thread_pass_get(struct thread_pass *p);
-
 void thread_pass_return(struct thread_pass *p);
 
-void thread_pass_continue(struct thread_pass *p);
+
