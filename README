@@ -5,7 +5,7 @@ This is a simple library that is pretty much complete.
 
 All it does is provide a simple way to send data between threads where one thread waits for the other to receive the data. There can be many senders, but only one receiver at a time. You can see that it has a server client like model which is easy to work with because of this. If you want to see how to use it, look at test.c in this directory and the man page (libthreadpass.3).
 
-The only dependency is the pthread library which can be linked to programs using this library by using the "-lpthread" flag before this library's flag "-thread's".
+The only dependency is the pthread library which can be linked to programs using this library by using the "-lpthread" flag before this library's flag "-lthreadpass".
 
 Install with "make && make install" inside your terminal.
 Uninstall with "make uninstall" if you want.
