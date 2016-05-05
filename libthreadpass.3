@@ -1,0 +1,125 @@
+.Dd $Mdocdate$
+.Os
+.Dt LIBTHREADPASS 3
+.Sh NAME
+.Nm libthreadpass
+.Nd Pass data between threads easily
+.Sh SYNOPSIS
+.In threadpass.h
+.in +4n
+.nf
+.sp
+struct thread_pass {
+        pthread_mutex_t server;
+        pthread_mutex_t clients;
+        pthread_cond_t done;
+
+        int work;
+        void *data;
+};
+.sp
+.fi
+.in
+.Ft struct thread_pass *
+.Fn thread_pass_new "void *data"
+.Ft void
+.Fn thread_pass_free "struct thread_pass *p"
+.Ft void *
+.Fn thread_pass_get "struct thread_pass *p"
+.Ft void
+.Fn thread_pass_return "struct thread_pass *p"
+.Ft void
+.Fn thread_pass_continue "struct thread_pass *p"
+
+.Sh DESCRIPTION
+.Nm
+is a C library for passing data between threads.
+.Pp
+.Fn thread_pass_new
+returns a newly allocated struct thread_pass that can be used
+.br
+.Fn thread_pass_free
+frees
+.Fa p
+which came from
+.Fn thread_pass_new
+like:
+.br
+.in +4n
+.nf
+.sp
+int main(int argc, char *argv[])
+{
+	struct thread_pass *p = thread_pass_new();
+
+	/* do stuff */
+
+	thread_pass_free(p);
+}
+.sp
+.fi
+.in
+.Fn thread_pass_continue
+causes the server to be done with the data held by
+.Fa p
+.br
+Value
+.Fa work
+in struct thread_pass can be used to check if there is any work for the server to do like:
+.in +4n
+.nf
+.sp
+void func(struct thread_pass *p)
+{
+        /* wait until work */
+        while (1) {
+                if (p->work) {
+                        /* do something */
+
+                        /* Probably want to call this
+                         * so the client knows we are done.
+                         */
+                        thread_pass_continue(p);
+                }
+        }
+}
+.sp
+.fi
+.in
+.Fn thread_pass_get
+gets the data for client held by
+.Fa p
+without causing problems
+.br
+.Fn thread_pass_return
+causes the client to wait for the server to deal with data held by
+.Fa p
+used after a call to
+.Fn thread_pass_get
+like:
+.br
+.in +4n
+.nf
+.sp
+void func(struct thread_pass *p)
+{
+        void *data = thread_pass_get(p);
+
+        /* do something to data */
+
+        /* send data to the server and wait */
+        thread_pass_return(p);
+
+        /* do something knowing the server has the data */
+
+        /* perfectly valid to do again */
+        data = thread_pass_get(p);
+        /* do something to data */
+        /* just make sure to always send data to server, even if unchanged */
+        thread_pass_return(p);
+}
+.sp
+.fi
+.in
+.Sh SEE ALSO
+.Xr pthreads 7
