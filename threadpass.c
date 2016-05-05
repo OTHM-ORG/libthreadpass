@@ -12,7 +12,8 @@ struct thread_pass {
 	void *data;
 };
 
-struct thread_pass *thread_pass_new(void *data)
+struct thread_pass *
+thread_pass_new(void *data)
 {
 	struct thread_pass *p = malloc(sizeof(*p));
 
@@ -24,7 +25,8 @@ struct thread_pass *thread_pass_new(void *data)
 	 return p;
 }
 
-void thread_pass_free(struct thread_pass *p)
+void
+thread_pass_free(struct thread_pass *p)
 {
 	pthread_mutex_destroy(&p->server);
 	pthread_mutex_destroy(&p->clients);
@@ -32,21 +34,24 @@ void thread_pass_free(struct thread_pass *p)
 	free(p);
 }
 
-void *thread_pass_get(struct thread_pass *p)
+void *
+thread_pass_get(struct thread_pass *p)
 {
 	pthread_mutex_lock(&p->clients);
 	return p->data;
 
 }
 
-void thread_pass_return(struct thread_pass *p)
+void
+thread_pass_return(struct thread_pass *p)
 {
 	p->work = 1;
 	pthread_cond_wait(&p->done, &p->server);
 	pthread_mutex_unlock(&p->clients);
 }
 
-void thread_pass_continue(struct thread_pass *p)
+void
+thread_pass_continue(struct thread_pass *p)
 {
 	p->work = 0;
 	pthread_cond_signal(&p->done);

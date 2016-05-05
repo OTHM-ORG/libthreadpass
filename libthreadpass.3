@@ -48,7 +48,8 @@ like:
 .in +4n
 .nf
 .sp
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
 	struct thread_pass *p = thread_pass_new();
 
@@ -69,7 +70,8 @@ in struct thread_pass can be used to check if there is any work for the server t
 .in +4n
 .nf
 .sp
-void func(struct thread_pass *p)
+void
+func(struct thread_pass *p)
 {
         /* wait until work */
         while (1) {
@@ -101,7 +103,8 @@ like:
 .in +4n
 .nf
 .sp
-void func(struct thread_pass *p)
+void
+func(struct thread_pass *p)
 {
         void *data = thread_pass_get(p);
 

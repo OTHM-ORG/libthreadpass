@@ -6,7 +6,8 @@
 
 int var;
 
-void *server(void *arg)
+void *
+server(void *arg)
 {
 	int var2;
 	int count = 0;
@@ -24,7 +25,8 @@ void *server(void *arg)
 	}
 }
 
-void *client(void *arg)
+void *
+client(void *arg)
 {
 	struct thread_pass *p = ((void **) arg)[0];
 	int var2 = *((int *) ((void **) arg)[1]);
@@ -34,7 +36,8 @@ void *client(void *arg)
 	pthread_exit(NULL);
 }
 
-int main(void)
+int
+main(void)
 {
 	pthread_t s;
 	pthread_t c1;
