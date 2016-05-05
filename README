@@ -1,6 +1,6 @@
 libthreadpass
 -------------
 
-This is a simple library that pretty much is complete.
+This is a simple library that is pretty much complete.
 
-All it does is provide a simple way to send data between threads where one thread waits for the other to receive the data. There can be many senders, but only one receiver at a time so it has a server client like model which is easy to work with. If you want to see how to use it look at test.c in this directory and the man page (libthreadpass.3).
+All it does is provide a simple way to send data between threads where one thread waits for the other to receive the data. There can be many senders, but only one receiver at a time. You can see that it has a server client like model which is easy to work with because of this. If you want to see how to use it, look at test.c in this directory and the man page (libthreadpass.3).
