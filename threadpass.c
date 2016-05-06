@@ -19,7 +19,7 @@ thread_pass_new(void *data)
 
 	 pthread_mutex_init(&p->server, NULL);
 	 pthread_mutex_init(&p->clients, NULL);
-	 pthread_cond_init (&p->done, NULL);
+	 pthread_cond_init(&p->done, NULL);
 	 p->data = data;
 	 p->work = 0;
 	 return p;
@@ -45,8 +45,15 @@ thread_pass_get(struct thread_pass *p)
 void
 thread_pass_return(struct thread_pass *p)
 {
+	pthread_mutex_lock(&p->server);
 	p->work = 1;
+
+	/* Unlocks &p->server letting server know
+	 * to call pthread_cond_signal so we can
+	 * progress.
+	 */
 	pthread_cond_wait(&p->done, &p->server);
+	pthread_mutex_unlock(&p->server);
 	pthread_mutex_unlock(&p->clients);
 }
 
@@ -54,5 +61,10 @@ void
 thread_pass_continue(struct thread_pass *p)
 {
 	p->work = 0;
+
+	/* Checks cond_wait has been called. */
+	pthread_mutex_lock(&p->server);
+	pthread_mutex_unlock(&p->server);
+
 	pthread_cond_signal(&p->done);
 }
