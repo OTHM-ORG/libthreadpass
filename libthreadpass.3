@@ -28,6 +28,8 @@ struct thread_pass {
 .Fn thread_pass_get "struct thread_pass *p"
 .Ft void
 .Fn thread_pass_return "struct thread_pass *p"
+.Ft int
+.Fn thread_pass_work "struct thread_pass *p"
 .Ft void
 .Fn thread_pass_continue "struct thread_pass *p"
 
@@ -64,9 +66,8 @@ main(int argc, char *argv[])
 causes the server to be done with the data held by
 .Fa p
 .br
-Value
-.Fa work
-in struct thread_pass can be used to check if there is any work for the server to do like:
+.Fn thread_pass_work
+is used to check if there is any work for the server to do like:
 .in +4n
 .nf
 .sp
@@ -75,7 +76,7 @@ func(struct thread_pass *p)
 {
         /* wait until work */
         while (1) {
-                if (p->work) {
+                if (thread_pass_work(p)) {
                         /* do something with p->data, its ours new */
 
                         /* Probably want to call this

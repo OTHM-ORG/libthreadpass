@@ -14,7 +14,7 @@ $(LIB): $(OBJ)
 	$(AR) -rcs $@ $(OBJ)
 
 test: test.o $(LIB)
-	$(CC) $(LDFLAGS) -o $@ test.o -lpthread $(LIB)
+	$(CC) $(LDFLAGS) -o $@ test.o -fsanitize=thread -lpthread $(LIB)
 
 .c.o:
 	$(CC) $(CFLAGS) -c $<

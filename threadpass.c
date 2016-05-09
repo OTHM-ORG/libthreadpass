@@ -57,14 +57,20 @@ thread_pass_return(struct thread_pass *p)
 	pthread_mutex_unlock(&p->clients);
 }
 
+int
+thread_pass_work(struct thread_pass *p)
+{
+	pthread_mutex_lock(&p->server);
+	if (p->work)
+		return 1;
+	pthread_mutex_unlock(&p->server);
+	return 0;
+}
+
 void
 thread_pass_continue(struct thread_pass *p)
 {
 	p->work = 0;
-
-	/* Checks cond_wait has been called. */
-	pthread_mutex_lock(&p->server);
 	pthread_mutex_unlock(&p->server);
-
 	pthread_cond_signal(&p->done);
 }

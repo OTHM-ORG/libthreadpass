@@ -13,15 +13,18 @@ server(void *arg)
 	int count = 0;
 	struct thread_pass *p = arg;
 
+	printf("server!\n");
+
 	while (1) {
-		if (!p->work)
+		while (!thread_pass_work(p))
 			continue;
 		var2 = *(int *) p->data;
-		thread_pass_continue(p);
 		printf("%i\n", var2);
+		thread_pass_continue(p);
 		++count;
-		if (count == 4)
+		if (count == 4) {
 			pthread_exit(NULL);
+		}
 	}
 }
 
